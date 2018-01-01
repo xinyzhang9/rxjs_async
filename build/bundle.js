@@ -14203,11 +14203,14 @@ exports.VirtualAction = VirtualAction;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Rx_1 = __webpack_require__(160);
 var startButton = document.querySelector('#start');
+var stopButton = document.querySelector('#stop');
 var start$ = Rx_1.Observable.fromEvent(startButton, 'click');
 var interval$ = Rx_1.Observable.interval(1000);
+var stop$ = Rx_1.Observable.fromEvent(stopButton, 'click');
+var intervalThatStops$ = interval$
+    .takeUntil(stop$);
 var startInterval$ = start$
-    .switchMapTo(interval$);
-startInterval$
+    .switchMapTo(intervalThatStops$)
     .subscribe(function (x) { return console.log(x); });
 
 
