@@ -1,0 +1,15 @@
+{
+  "name": "rxjs_async",
+  "version": "1.0.0",
+  "description": "step-by-step async js with Rxjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rxjs",
+    "async"
+  ],
+  "author": "xinyzhang9@gmail.com",
+  "license": "ISC"
+}
