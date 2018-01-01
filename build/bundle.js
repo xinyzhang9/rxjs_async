@@ -14209,11 +14209,13 @@ var interval$ = Rx_1.Observable.interval(1000);
 var stop$ = Rx_1.Observable.fromEvent(stopButton, 'click');
 var intervalThatStops$ = interval$
     .takeUntil(stop$);
-var startInterval$ = start$
+var data = { count: 0 };
+start$
     .switchMapTo(intervalThatStops$)
-    .scan(function (acc) {
-    return { count: acc.count + 1 };
-}, { count: 0 })
+    .startWith(0)
+    .scan(function (acc, curr) {
+    return acc + 1;
+})
     .subscribe(function (x) { return console.log(x); });
 
 
