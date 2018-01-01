@@ -14211,6 +14211,9 @@ var intervalThatStops$ = interval$
     .takeUntil(stop$);
 var startInterval$ = start$
     .switchMapTo(intervalThatStops$)
+    .scan(function (acc) {
+    return { count: acc.count + 1 };
+}, { count: 0 })
     .subscribe(function (x) { return console.log(x); });
 
 
