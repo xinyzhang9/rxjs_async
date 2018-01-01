@@ -14196,28 +14196,41 @@ exports.VirtualAction = VirtualAction;
 
 /***/ }),
 /* 159 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__);
 
-Object.defineProperty(exports, "__esModule", { value: true });
-var Rx_1 = __webpack_require__(160);
-var startButton = document.querySelector('#start');
-var stopButton = document.querySelector('#stop');
-var start$ = Rx_1.Observable.fromEvent(startButton, 'click');
-var interval$ = Rx_1.Observable.interval(1000);
-var stop$ = Rx_1.Observable.fromEvent(stopButton, 'click');
-var intervalThatStops$ = interval$
+
+const startButton = document.querySelector('#start');
+const stopButton = document.querySelector('#stop');
+const resetButton = document.querySelector('#reset');
+
+const start$ = __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromEvent(startButton, 'click');
+const interval$ = __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].interval(1000);
+const stop$ = __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromEvent(stopButton, 'click');
+const reset$ = __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].fromEvent(resetButton, 'click');
+
+const intervalThatStops$ = interval$
     .takeUntil(stop$);
-var data = { count: 0 };
-start$
-    .switchMapTo(intervalThatStops$)
-    .startWith(0)
-    .scan(function (acc, curr) {
-    return acc + 1;
-})
-    .subscribe(function (x) { return console.log(x); });
 
+const data = {count:0};
+const inc = (acc) => ({count: acc.count + 1});
+const reset = (acc) => data;
+
+const incOrReset$ = __WEBPACK_IMPORTED_MODULE_0_rxjs_Rx__["Observable"].merge(
+    intervalThatStops$.mapTo(inc),
+    reset$.mapTo(reset)
+);
+start$   
+    .switchMapTo(incOrReset$)
+    .startWith(data)
+    .scan((acc,curr) => {
+        return curr(acc);
+    })
+    .subscribe( (x) => console.log(x) );
 
 /***/ }),
 /* 160 */
